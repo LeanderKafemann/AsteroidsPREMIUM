@@ -19,11 +19,16 @@ public class Raumschiff extends Actor
     private int leben;
     private boolean geschossen;
     private boolean gameOver;
+    private GreenfootSound s;
+    private int cooldown;
     
     public Raumschiff() {
         leben = 3;
         geschossen = false;
         gameOver = false;
+        cooldown = 10;
+        s = new GreenfootSound("soundtrack.mp3");
+        s.playLoop();
     }
     
     public void act()
@@ -88,6 +93,7 @@ public class Raumschiff extends Actor
                 //gameOver
                 leben -= 1;
                 gameOver = true;
+                s.stop();
                 Greenfoot.playSound("gameOver.mp3");
             }
         }
@@ -127,24 +133,32 @@ public class Raumschiff extends Actor
         }
         
         //Ufo-Generierung
-        if (Greenfoot.getRandomNumber(400) == 42) {
-            Ufo neuesUfo = new Ufo(getGeschwindigkeit(), getGeschwindigkeit());
-            //posX, posY = getEdge();
-            getWorld().addObject(neuesUfo, 10, 10);
+        if (Greenfoot.getRandomNumber(500) == 42) {
+            generateUfo();
         }
         
-        //Asteroid-Generierung
+        //neue Asteroiden
         if (Greenfoot.getRandomNumber(200) == 42) {
-            Asteroid neuerAsteroid = new Asteroid(getGeschwindigkeit(), getGeschwindigkeit(), Greenfoot.getRandomNumber(3)+1);
-            int[] asteroidSpawn = getAsteroidSpawn();
-            getWorld().addObject(neuerAsteroid, asteroidSpawn[0], asteroidSpawn[1]);
+            generateAsteroid();
+        }
+        
+        //keine Asteroiden -> viele Asteroiden
+        MyWorld mW = (MyWorld) getWorld();
+        if (mW.getAsteroids() == 0) {
+            if (cooldown > 0){
+                generateAsteroid();
+                generateAsteroid();
+                generateAsteroid();
+                generateAsteroid();
+                generateAsteroid();
+                cooldown = 10;
+            } else {cooldown -= 1;}
         }
         
         if (gameOver) {
             getWorld().showText("Rangliste wird geladen...", 400, 75);
             //webRequest
             try {
-                MyWorld mW = (MyWorld) getWorld(); //MyWorld-Objekt erzeugen
                 //URL generieren
                 String urlString = "https://asteroidspremium.pythonanywhere.com/asteroidsRangliste?name="+mW.getName()+"&score="+String.valueOf(mW.getScore());
                 
@@ -175,9 +189,13 @@ public class Raumschiff extends Actor
             Greenfoot.stop();
         }
     }
-    
-    
-    public int[] getAsteroidSpawn(){
+    //Asteroid-Generierung
+    public void generateAsteroid(){
+        Asteroid neuerAsteroid = new Asteroid(getGeschwindigkeit(), getGeschwindigkeit(), Greenfoot.getRandomNumber(3)+1);
+            int[] asteroidSpawn = getSpawn();
+            getWorld().addObject(neuerAsteroid, asteroidSpawn[0], asteroidSpawn[1]);
+        }
+    public int[] getSpawn(){
         int[] asteroid_spawn = new int[2];
         asteroid_spawn[0] = 15;
         asteroid_spawn[1] = 15;
@@ -188,7 +206,13 @@ public class Raumschiff extends Actor
         }
         return asteroid_spawn;
     }
-    
+    //Ufo-Generieriung
+    public void generateUfo(){
+        Ufo neuesUfo = new Ufo(getGeschwindigkeit(), getGeschwindigkeit());
+            //posX, posY = getEdge();
+            int[] UfoSpawn = getSpawn();
+            getWorld().addObject(neuesUfo, UfoSpawn[0], UfoSpawn[1]);
+    }
     
     public int getLeben() {
         return leben;

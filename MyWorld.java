@@ -15,6 +15,7 @@ public class MyWorld extends World
      */
     private int score;
     private String name;
+    private int asteroids;
     
     public MyWorld()
     {    
@@ -30,10 +31,9 @@ public class MyWorld extends World
         }
         //setName muss hier stattfinden
         name = Greenfoot.ask("Name?");
-        this.showText("Name: "+name, 700, 580);
+        this.showText("Name: "+name, 650, 580);
         
         //Soundtrack
-        Greenfoot.playSound("soundtrack.mp3");
     }
     
     public int getScore() {
@@ -46,5 +46,17 @@ public class MyWorld extends World
     
     public String getName() {
         return name;
+    }
+    
+    public void addAsteroid() {
+        asteroids += 1;
+    }
+    
+    public void removeAsteroid() {
+        asteroids -= 1;
+    }
+    
+    public int getAsteroids() {
+        return asteroids;
     }
 }

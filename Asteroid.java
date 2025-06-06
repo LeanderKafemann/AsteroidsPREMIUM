@@ -16,6 +16,7 @@ public class Asteroid extends Actor
   private int geschwindigkeitX;
   private int geschwindigkeitY;
   private int groesse;
+  private boolean spornAdd;
   
   public Asteroid(int geschwindigkeitX, int geschwindigkeitY, int groesse) {
       this.geschwindigkeitX = geschwindigkeitX;
@@ -34,10 +35,20 @@ public class Asteroid extends Actor
       imageName += String.valueOf(Greenfoot.getRandomNumber(3)+1);
       imageName += ".png";
       this.setImage(imageName);
+      
+      this.spornAdd = true;
   }
   
   public void act()
   {
+    //Asteroiden-Zähler
+    if (spornAdd) {
+        MyWorld mW = (MyWorld) getWorld();
+        mW.addAsteroid();
+        spornAdd = false;
+    }
+    
+    //Bewegung
     setLocation(getX()+geschwindigkeitX, getY()+geschwindigkeitY);
     if (getX() > 798) {
         setLocation(2, getY());
@@ -64,6 +75,8 @@ public class Asteroid extends Actor
         Asteroid a2 = new Asteroid(x2, y2, groesse-1);
         getWorld().addObject(a2, getX(), getY());
     }
+    MyWorld mW = (MyWorld) getWorld();
+    mW.removeAsteroid();
     getWorld().removeObject(this);
   }
 }

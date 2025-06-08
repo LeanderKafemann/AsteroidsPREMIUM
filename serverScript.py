@@ -1,18 +1,20 @@
-import cgi
+from PyWSGIRef import *
 
-HTML = {ord("ü"): "&uuml;"} #...
+HTML = {ord("ü"): "ue", ord("ö"): "oe", ord("ä"): "ae",\
+        ord("Ü"): "Ue", ord("Ö"): "Oe", ord("Ä"): "Ae", ord("ß"): "ss"}
 
-def application(environ, start_response):
+def applicationObject(path: str, form: FieldStorage) -> tuple[str, str, str]:
+    """
+    This function is used to process the request and return the response.
+    """
     status = "200 OK"
-    type_ = "text/html"
-    if environ["PATH_INFO"] == "/asteroidsRangliste":
+    if path == "/asteroidsRangliste":
         scores = []
         names = []
         with open("./rangliste.txt", "r", encoding="utf-8") as f:
             for i in f.read().split("#**#"):
                 scores.append(int(i.split("#*#")[0]))
                 names.append(i.split("#*#")[1])
-        form = cgi.FieldStorage(fp=environ.get("wsgi.input"), environ=environ, keep_blank_values=True)
         newName = form.getvalue("name")
         newScore = int(form.getvalue("score"))
         for i in range(10):
@@ -30,20 +32,17 @@ def application(environ, start_response):
         with open("./rangliste.txt", "w", encoding="utf-8") as f:
             f.write(ranglistenString)
         content = ranglistenString.replace("#**#", "\n").replace("#*#", " von ")
-    elif environ["PATH_INFO"] == "/test":
+    elif path == "/test":
         content = "test"
+    elif path == "/hello":
+        content = HELLO_WORLD
     else:
-        content = "Error!"
-    response_headers = [("Content-Type", type_), ("Content-Length", str(len(content))),\
-                        ("Access-Control-Allow-Origin", "*")]
-    start_response(status, response_headers)
-    content = content.translate(HTML)
-    return [content.encode("utf-8")]
+        status = "404 Not Found"
+        content = ERROR
+    return content, "text/html", status
 
 if __name__ == "__main__":
-    from wsgiref.simple_server import make_server
-    port = 8000
-    httpd = make_server("", port, application)
-    print("Application started...")
-    print(f"Serving on port {port}")
-    httpd.serve_forever()
+    application = makeApplicationObject(applicationObject, True, True)
+    server = setUpServer(application)
+    print("Successfully set up server.")
+    server.serve_forever()

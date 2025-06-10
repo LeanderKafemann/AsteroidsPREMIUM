@@ -1,4 +1,4 @@
-from PyWSGIRef import *
+from PyWSGIRef import HELLO_WORLD, ERROR, FieldStorage, makeApplicationObject, setUpServer
 
 HTML = {ord("ü"): "ue", ord("ö"): "oe", ord("ä"): "ae",\
         ord("Ü"): "Ue", ord("Ö"): "Oe", ord("Ä"): "Ae", ord("ß"): "ss"}
@@ -40,9 +40,10 @@ def applicationObject(path: str, form: FieldStorage) -> tuple[str, str, str]:
         status = "404 Not Found"
         content = ERROR
     return content, "text/html", status
+application = makeApplicationObject(applicationObject, True, True)
 
 if __name__ == "__main__":
-    application = makeApplicationObject(applicationObject, True, True)
     server = setUpServer(application)
     print("Successfully set up server.")
     server.serve_forever()
+    print("Go to asteroidspremium_pythonanywhere_com_wsgi.py...")

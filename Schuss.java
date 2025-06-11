@@ -15,12 +15,15 @@ public class Schuss extends Actor
     private int geschwindigkeit;
     private int alter;
     private boolean raumschiffSchuss;
+    private GreenfootSound treffer; 
     
     public Schuss(int geschwindigkeit, int rotation, boolean raumschiffSchuss) {
         this.geschwindigkeit = geschwindigkeit;
         setRotation(0);
         turn(rotation);
         this.raumschiffSchuss = raumschiffSchuss;
+        treffer = new GreenfootSound("kollision.mp3");
+        treffer.setVolume(50);
         if (raumschiffSchuss == false) {
             this.setImage("Ufo_Schuss.png");
         }
@@ -46,9 +49,11 @@ public class Schuss extends Actor
             Asteroid a = (Asteroid) k;
             a.abgeschossen();
             alter = 200;
-            MyWorld mW = (MyWorld) getWorld();
-            mW.increaseScore(50);
-            Greenfoot.playSound("kollision.mp3");
+            if (raumschiffSchuss) {
+                MyWorld mW = (MyWorld) getWorld();
+                mW.increaseScore(50);
+            }
+            treffer.play();
         }
         
         // Kollisionserkennung Ufo

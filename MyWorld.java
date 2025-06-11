@@ -53,7 +53,7 @@ public class MyWorld extends World
     }
     
     public void removeAsteroid() {
-        asteroids -= 1;
+            asteroids -= 1;
     }
     
     public int getAsteroids() {

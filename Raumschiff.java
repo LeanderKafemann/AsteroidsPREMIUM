@@ -66,6 +66,7 @@ public class Raumschiff extends Actor
         }
         if (Greenfoot.isKeyDown("down")) { 
             //bremsen
+            generateAsteroid(4);
             geschwindigkeitX = geschwindigkeitX * 0.975;
             geschwindigkeitY = geschwindigkeitY * 0.975;
         }
@@ -88,6 +89,8 @@ public class Raumschiff extends Actor
             if (leben > 1) {
                 leben -= 1;
                 getWorld().removeObject(k);
+                MyWorld mW = (MyWorld) getWorld();
+                mW.removeAsteroid();
                 Greenfoot.playSound("raumschiffKoll.mp3");
             } else {
                 //gameOver
@@ -144,15 +147,22 @@ public class Raumschiff extends Actor
         
         //keine Asteroiden -> viele Asteroiden
         MyWorld mW = (MyWorld) getWorld();
-        if (mW.getAsteroids() == 0) {
-            if (cooldown > 0){
-                generateAsteroid();
-                generateAsteroid();
-                generateAsteroid();
-                generateAsteroid();
-                generateAsteroid();
+        if (mW.getAsteroids() <= 0) {
+            if (cooldown == 0){
+                generateAsteroid(1);
+                generateAsteroid(2);
+                for(int i = 1; i <=3; i++){
+                    if(Greenfoot.getRandomNumber(2) == 0){
+                        generateAsteroid(i);
+                    }
+                }
                 cooldown = 10;
             } else {cooldown -= 1;}
+        }
+        
+        // viele Punkte -> Spezial-Asteroid
+        if (mW.getScore() % 5000 == 0 && mW.getScore() > 0) {
+            generateAsteroid(4);
         }
         
         if (gameOver) {
@@ -184,7 +194,7 @@ public class Raumschiff extends Actor
             } catch (IOException e) {
                 getWorld().showText("Fehler beim Abrufen der Rangliste", 400, 300);
             }
-           
+            s.stop();
             getWorld().showText("Game over!", 400, 100);
             Greenfoot.stop();
         }
@@ -192,6 +202,12 @@ public class Raumschiff extends Actor
     //Asteroid-Generierung
     public void generateAsteroid(){
         Asteroid neuerAsteroid = new Asteroid(getGeschwindigkeit(), getGeschwindigkeit(), Greenfoot.getRandomNumber(3)+1);
+            int[] asteroidSpawn = getSpawn();
+            getWorld().addObject(neuerAsteroid, asteroidSpawn[0], asteroidSpawn[1]);
+        }
+        
+    public void generateAsteroid(int size){
+        Asteroid neuerAsteroid = new Asteroid(getGeschwindigkeit(), getGeschwindigkeit(), size);
             int[] asteroidSpawn = getSpawn();
             getWorld().addObject(neuerAsteroid, asteroidSpawn[0], asteroidSpawn[1]);
         }

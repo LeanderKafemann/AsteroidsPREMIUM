@@ -25,7 +25,9 @@ public class Asteroid extends Actor
       
       // korrektes Bild setzen
       String imageName = "Asteroid_";
-      if (groesse == 3) {
+      if (groesse == 4) {
+          imageName += "XL_";
+      } else if (groesse == 3) {
           imageName += "big_";
       } else if (groesse == 2) {
           imageName += "medium_";
@@ -65,6 +67,7 @@ public class Asteroid extends Actor
   }
   
   public void abgeschossen() {
+    MyWorld mW = (MyWorld) getWorld();
     if (groesse > 1) {
         int x1 = Greenfoot.getRandomNumber(2)+1;
         int x2 = -x1;
@@ -75,7 +78,20 @@ public class Asteroid extends Actor
         Asteroid a2 = new Asteroid(x2, y2, groesse-1);
         getWorld().addObject(a2, getX(), getY());
     }
-    MyWorld mW = (MyWorld) getWorld();
+    if (groesse == 4) {
+        mW.increaseScore(201);
+        int score = mW.getScore();
+        int extra = (int) (score / 3000);
+        extra += 3;
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < extra; i++) {
+             x = (Greenfoot.getRandomNumber(3)+1) * (Greenfoot.getRandomNumber(1)*2 - 1);
+             y = (Greenfoot.getRandomNumber(3)+1) * (Greenfoot.getRandomNumber(1)*2 - 1);
+             Asteroid a = new Asteroid(x, y, Greenfoot.getRandomNumber(2)+2);
+             getWorld().addObject(a, getX(), getY());
+        }
+    }
     mW.removeAsteroid();
     getWorld().removeObject(this);
   }

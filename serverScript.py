@@ -1,32 +1,18 @@
-from PyWSGIRef import HELLO_WORLD, ERROR, FieldStorage, makeApplicationObject, setUpServer
+from PyWSGIRef import HELLO_WORLD, ERROR, FieldStorage, addSchablone, makeApplicationObject, setUpServer, BETA, SCHABLONEN
+
+BETA.enable()
+
+addSchablone("ranglisteHTML", "./webRangliste.pyhtml")
 
 HTML = {ord("ü"): "ue", ord("ö"): "oe", ord("ä"): "ae",\
         ord("Ü"): "Ue", ord("Ö"): "Oe", ord("Ä"): "Ae", ord("ß"): "ss"}
 
-def rangliste():
-    scores = []
-    names = []
+def formatScoreboard(scoreboard: str):
+    return scoreboard.replace("#**#", "\n").replace("#*#", " von ")
+
+def formatScoreboardRead():
     with open("./rangliste.txt", "r", encoding="utf-8") as f:
-        for i in f.read().split("#**#"):
-            scores.append(int(i.split("#*#")[0]))
-            names.append(i.split("#*#")[1])
-    newName = form.getvalue("name")
-    newScore = int(form.getvalue("score"))
-    for i in range(10):
-        if newScore > scores[i]:
-            scores.insert(i, newScore)
-            names.insert(i, newName)
-            scores = scores[:-1]
-            names = names[:-1]
-            break
-    ranglistenString = ""
-    for i in range(10):
-        ranglistenString += str(scores[i])+"#*#"+names[i]
-        if i != 9:
-            ranglistenString += "#**#"
-    with open("./rangliste.txt", "w", encoding="utf-8") as f:
-        f.write(ranglistenString)
-    content = ranglistenString.replace("#**#", "\n").replace("#*#", " von ")
+        return formatScoreboard(f.read())
 
 def applicationObject(path: str, form: FieldStorage) -> tuple[str, str, str]:
     """
@@ -34,7 +20,31 @@ def applicationObject(path: str, form: FieldStorage) -> tuple[str, str, str]:
     """
     status = "200 OK"
     if path == "/asteroidsRangliste":
-        rangliste()
+        scores = []
+        names = []
+        with open("./rangliste.txt", "r", encoding="utf-8") as f:
+            for i in f.read().split("#**#"):
+                scores.append(int(i.split("#*#")[0]))
+                names.append(i.split("#*#")[1])
+        newName = form.getvalue("name")
+        newScore = int(form.getvalue("score"))
+        for i in range(10):
+            if newScore > scores[i]:
+                scores.insert(i, newScore)
+                names.insert(i, newName)
+                scores = scores[:-1]
+                names = names[:-1]
+                break
+        ranglistenString = ""
+        for i in range(10):
+            ranglistenString += str(scores[i])+"#*#"+names[i]
+            if i != 9:
+                ranglistenString += "#**#"
+        with open("./rangliste.txt", "w", encoding="utf-8") as f:
+            f.write(ranglistenString)
+        content = formatScoreboard(ranglistenString)
+    elif path == "/onlineRanglisteAsteroids":
+        return SCHABLONEN["ranglisteHTML"].decodedContext(locals())
     elif path == "/test":
         content = "test"
     elif path == "/hello":

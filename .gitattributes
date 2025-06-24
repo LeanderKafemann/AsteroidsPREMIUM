@@ -3,3 +3,6 @@
 
 *.greenfoot linguist-language=Greenfoot
 *.greenfoot linguist-detectable=true
+
+*.pyhtml linguist-language=pyhtml
+*.pyhtml linguist-detectable=true

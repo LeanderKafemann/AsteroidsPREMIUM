@@ -1,0 +1,10 @@
+<{{evalPyHTML}}><title>Ranglisten</title>
+		<{{evalPyHTML-modernStyling: true}}>
+	</head>
+	<body>
+		<h1>AsteroidsPREMIUM - Ranglisten</h1>
+		<p>Hier findest du die Ranglisten der AsteroidsPREMIUM-Server.</p>
+		<p>
+			<{{evalPyHTML-eval: formatScoreboardRead() .eval-}}
+		</p>
+	<{{evalPyHTML}}>

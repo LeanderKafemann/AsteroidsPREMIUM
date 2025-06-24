@@ -1,8 +1,8 @@
-from PyWSGIRef import HELLO_WORLD, ERROR, FieldStorage, addSchablone, makeApplicationObject, setUpServer, BETA, SCHABLONEN
+from PyWSGIRef import HELLO_WORLD, ERROR, FieldStorage, addSchablone, loadFromFile, makeApplicationObject, setUpServer, BETA, SCHABLONE
 
 BETA.enable()
 
-addSchablone("ranglisteHTML", "./webRangliste.pyhtml")
+addSchablone("ranglisteHTML", loadFromFile("./webRangliste.pyhtml"))
 
 HTML = {ord("ü"): "ue", ord("ö"): "oe", ord("ä"): "ae",\
         ord("Ü"): "Ue", ord("Ö"): "Oe", ord("Ä"): "Ae", ord("ß"): "ss"}
@@ -12,7 +12,7 @@ def formatScoreboard(scoreboard: str):
 
 def formatScoreboardRead():
     with open("./rangliste.txt", "r", encoding="utf-8") as f:
-        return formatScoreboard(f.read())
+        return formatScoreboard(f.read()).replace("\n", "<br/">)
 
 def applicationObject(path: str, form: FieldStorage) -> tuple[str, str, str]:
     """

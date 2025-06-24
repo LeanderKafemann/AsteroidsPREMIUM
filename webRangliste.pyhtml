@@ -5,6 +5,6 @@
 		<h1>AsteroidsPREMIUM - Ranglisten</h1>
 		<p>Hier findest du die Ranglisten der AsteroidsPREMIUM-Server.</p>
 		<p>
-			<{{evalPyHTML-eval: formatScoreboardRead() .eval-}}
+			<{{evalPyHTML-eval: formatScoreboardRead() :eval-}}>
 		</p>
 	<{{evalPyHTML}}>

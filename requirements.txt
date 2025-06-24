@@ -1,1 +1,1 @@
-PyWSGIRef >= 1.1.1
+PyWSGIRef >= 1.1.10

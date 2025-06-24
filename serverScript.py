@@ -44,7 +44,7 @@ def applicationObject(path: str, form: FieldStorage) -> tuple[str, str, str]:
             f.write(ranglistenString)
         content = formatScoreboard(ranglistenString)
     elif path == "/onlineRanglisteAsteroids":
-        return SCHABLONEN["ranglisteHTML"].decodedContext(locals())
+        return SCHABLONEN["ranglisteHTML"].decodedContext(globals())
     elif path == "/test":
         content = "test"
     elif path == "/hello":

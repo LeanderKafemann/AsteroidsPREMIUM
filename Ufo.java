@@ -1,16 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
-/**
- * Write a description of class Ufo here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Ufo extends Actor
 {
     /**
-     * Act - do whatever the Ufo wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Ufos als Gegner des Spielers
+     * 
+     * @param geschwindigkeitX geschw. in X-Richtung
+     * @param geschwindigkeitY geschw. in Y-Richtung
+     * @void act wird jeden tick ausgeführt, handelt Bewegung & co. ab
      */
     private int geschwindigkeitX;
     private int geschwindigkeitY;

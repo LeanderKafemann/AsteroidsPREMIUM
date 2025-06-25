@@ -1,16 +1,15 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
-/**
- * Write a description of class Schuss here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Schuss extends Actor
 {
     /**
-     * Act - do whatever the Schuss wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Schüsse als Schüsse des Spielers / Ufos
+     * 
+     * @param geschwindigkeit geschwindigkeit des Schusses
+     * @param alter ist das Alter des Schusses (irgendwann wird der Schuss entfernt)
+     * @param raumschiffSchuss beschreibt, ob der Schuss vom Raumschiff verursacht wurde (das Raumschiff schießt sich nicht selbst ab)
+     * @param treffer ist das GreenfootSound-Objekt des Treffer-Sounds (leiser als normal)
+     * @void act Act-Methode (jeden tick abgehandelt; Bewegung & co...)
      */
     private int geschwindigkeit;
     private int alter;

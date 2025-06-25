@@ -1,16 +1,16 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
-/**
- * Write a description of class Asteroid here.
- * 
- * Leander Kafemann 
- * 25.5.7
- */
 public class Asteroid extends Actor
 {
     /**
-     * Act - do whatever the Asteroid wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Asteroiden als Gegner des Spielers
+     * 
+     * @param geschwindigkeitX geschw. in X-Richtung
+     * @param geschwindigkeitY geschw. in Y-Richtung
+     * @param groesse beschreibt die groesse des Asteroiden (1-4)
+     * @param spornAdd existiert da der Zaehler in MyWorld
+     *        nicht im Konstrukter aufgerufen werden darf
+     * @void act wird jeden tick ausgeführt, handelt Bewegung & co. ab
+     * @void abgeschossen entfernt den Asteroiden wenn er abgeschossen wurde
      */
   
   private int geschwindigkeitX;
@@ -18,6 +18,7 @@ public class Asteroid extends Actor
   private int groesse;
   private boolean spornAdd;
   
+  //Erstelle den Asteroiden mit Geschw. und Groesse
   public Asteroid(int geschwindigkeitX, int geschwindigkeitY, int groesse) {
       this.geschwindigkeitX = geschwindigkeitX;
       this.geschwindigkeitY = geschwindigkeitY;
@@ -38,7 +39,7 @@ public class Asteroid extends Actor
       imageName += ".png";
       this.setImage(imageName);
       
-      this.spornAdd = true;
+      this.spornAdd = true; // Aktiviert den Asteroiden-Zähler
   }
   
   public void act()
@@ -66,9 +67,9 @@ public class Asteroid extends Actor
     }
   }
   
-  public void abgeschossen() {
+  public void abgeschossen() { // Wird aktiviert wenn ein Schuss den Asteroiden trifft
     MyWorld mW = (MyWorld) getWorld();
-    if (groesse > 1) {
+    if (groesse > 1) { //Zerteilt den Asteroiden wenn er ausreichen groß war
         int x1 = Greenfoot.getRandomNumber(2)+1;
         int x2 = -x1;
         int y1 = Greenfoot.getRandomNumber(2)+1;
@@ -78,20 +79,21 @@ public class Asteroid extends Actor
         Asteroid a2 = new Asteroid(x2, y2, groesse-1);
         getWorld().addObject(a2, getX(), getY());
     }
-    if (groesse == 4) {
-        mW.increaseScore(201);
+    if (groesse == 4) { //Fügt zusätzliche Asteroiden hinzu,falls Boss
+        mW.increaseScore(201); //Bonuspunkte für Boss
         int score = mW.getScore();
         int extra = (int) (score / 3000);
-        extra += 3;
+        extra += 2;
         int x = 0;
         int y = 0;
         for (int i = 0; i < extra; i++) {
              x = (Greenfoot.getRandomNumber(3)+1) * (Greenfoot.getRandomNumber(1)*2 - 1);
              y = (Greenfoot.getRandomNumber(3)+1) * (Greenfoot.getRandomNumber(1)*2 - 1);
-             Asteroid a = new Asteroid(x, y, Greenfoot.getRandomNumber(2)+2);
+             Asteroid a = new Asteroid(x, y, Greenfoot.getRandomNumber(3)+1);
              getWorld().addObject(a, getX(), getY());
         }
     }
+    // Entfernt den Asteroiden
     mW.removeAsteroid();
     getWorld().removeObject(this);
   }

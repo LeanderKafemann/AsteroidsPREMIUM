@@ -13,16 +13,16 @@ public class Leben extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     private int lebenNummer;
-    private Raumschiff r;
+    private Raumschiff raumschiff;
     
-    public Leben(int lebenNummer, Raumschiff r) {
+    public Leben(int lebenNummer, Raumschiff raumschiff) {
         turn(270);
         this.lebenNummer = lebenNummer;
-        this.r = r;
+        this.raumschiff = raumschiff;
     }
     public void act()
     {
-        if (r.getLeben() < lebenNummer) {
+        if (raumschiff.getLeben() < lebenNummer) {
             getWorld().removeObject(this);
         }
     }

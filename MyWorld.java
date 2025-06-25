@@ -1,17 +1,21 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
-/**
- * Write a description of class MyWorld here.
+/** Programmname: AsteroidsPREMIUM
+ * Arcade Spiel "Asteroids" in Greenfoot
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Leander Kafemann, Florian Liske
+ * @version 1.1 / 25.06.2025
  */
+
 public class MyWorld extends World
 {
 
     /**
-     * Constructor for objects of class MyWorld.
+     * Konstruktor für Objekte der Klasse MyWorld.
      * 
+     * @param score Zaehlt die Punktzahl
+     * @param name Speichert den eingegeben Namen für die Rangliste
+     * @param asteroids zaehlt wie viele Asteroiden auf dem Spielfeld sind
      */
     private int score;
     private String name;
@@ -19,23 +23,22 @@ public class MyWorld extends World
     
     public MyWorld()
     {    
-        // Create a new world with 800x600 cells with a cell size of 1x1 pixels.
-        super(800, 600, 1);
-        Raumschiff r = new Raumschiff();
-        addObject(r, 400, 300);
+        super(800, 600, 1); // Erstelle eine neue Welt der Groesse 800x600.
+        Raumschiff r = new Raumschiff(); 
+        addObject(r, 400, 300); // Sporne das Raumschiff
         score = 0;
         addObject(new Counter(), 550, 590);
         for (int i = 1; i<4; i++) {
             Leben l = new Leben(i, r);
             addObject(l, 25*i, 580);
         }
-        //setName muss hier stattfinden
+        //Frage den Spieler nach einem Namen
         name = Greenfoot.ask("Name?");
         this.showText("Name: "+name, 650, 580);
         
-        //Soundtrack
     }
     
+    //Score Counter
     public int getScore() {
         return score;
     }
@@ -43,11 +46,13 @@ public class MyWorld extends World
     public void increaseScore(Integer toIncr) {
         score += toIncr;
     }
+
     
     public String getName() {
         return name;
     }
     
+    //Asteroid-Counter
     public void addAsteroid() {
         asteroids += 1;
     }
